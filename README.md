@@ -9,6 +9,7 @@ lockIF, e := dis_redis.NewRedisLock(100, pool, "cisco", timeout)
 	}
 
 //v 是 setnx 设置的value
+//尝试加锁，如果有错误返回，加锁失败。
 e := lockIF.Lock(v)
 	if e!=nil {
 		return
@@ -16,6 +17,8 @@ e := lockIF.Lock(v)
 
 ....这是处理业务
 
+//释放锁 
+//v 是之前setnx 设置的value
 lockIF.Unlock(v)
 
 ```
