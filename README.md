@@ -8,7 +8,7 @@ lockIF, e := dis_redis.NewRedisLock(100, pool, "cisco", timeout)
 		panic("参数异常")
 	}
 
-
+//v 是 setnx 设置的value
 e := lockIF.Lock(v)
 	if e!=nil {
 		return
@@ -16,7 +16,7 @@ e := lockIF.Lock(v)
 
 ....这是处理业务
 
-lockIF.Unlock()
+lockIF.Unlock(v)
 
 ```
 
