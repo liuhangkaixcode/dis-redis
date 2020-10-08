@@ -3,6 +3,7 @@ package dis_redis
 import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"sync"
 	"testing"
@@ -14,43 +15,25 @@ var (
 	ticketSum=15
 	timeout=10
 )
-//初始化一个redispool
-func getRedispool()  *redis.Pool{
-	pool := &redis.Pool{
-		MaxIdle:     10,
-		MaxActive:   20000,
-		IdleTimeout: 10 * time.Second,
-		Dial: func() (redis.Conn, error) {
-			return redis.Dial("tcp", "127.0.0.1:6379")
-		},
-	}
-	conn := pool.Get()
-	defer conn.Close()
 
-	_, err := conn.Do("ping")
-	if err != nil {
-		panic("redis is not start........\n")
-	}else{
-		fmt.Println("redis inint success....")
-	}
-	return pool
-}
-
+//模拟并发抢票的过程
 func TestNewRedisLock(t *testing.T) {
-      pool:= getRedispool()
+	//redis pool初始化
+	pool:= getRedispool()
 	lockIF, e := NewRedisLock(100, pool, "cisco", timeout)
 	if e!=nil {
 		panic("参数异常")
 	}
 
-
-	for i:=0;i<200;i++{
+	//模拟20000 并发
+	for i:=0;i<20000;i++{
 		ws.Add(1)
 		go ticketgrabbing(lockIF,pool)
 	}
 	ws.Wait()
 
 }
+//抢票逻辑
 func ticketgrabbing(lockIF RedisLockIF,pool *redis.Pool)  {
 	u4 := uuid.New()
 	v:=u4.String()
@@ -92,4 +75,10 @@ func ticketgrabbing(lockIF RedisLockIF,pool *redis.Pool)  {
 	}
 
 
+}
+
+
+//模拟分布式秒杀过程
+func TestGinServer(t *testing.T)  {
+	runserverDemo()
 }

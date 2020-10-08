@@ -43,7 +43,7 @@ func NewRedisLock(trylocknum int, pool *redis.Pool, key string,timeout int) (Red
 	a.timeout=timeout
 	return a,nil
 }
-
+//加锁
 func (p *redisLock)Lock(v string) error{
 	conn:=p.pool.Get()
 	p.l.Lock()
@@ -82,7 +82,7 @@ func (p *redisLock)Lock(v string) error{
 	return nil
 
 }
-
+//释放锁
 func (p *redisLock)UnLock( v string)  error{
 	conn:=p.pool.Get()
 	defer conn.Close()
