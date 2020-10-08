@@ -1,6 +1,6 @@
 # dis-redis 基于redis的分布式锁
 
-# 使用方法
+### 使用方法
 ```cassandraql
 import  "github.com/liuhangkaixcode/dis-redis"
 lockIF, e := dis_redis.NewRedisLock(100, pool, "cisco", timeout)
