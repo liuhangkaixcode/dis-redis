@@ -2,7 +2,8 @@
 
 # 使用方法
 ```cassandraql
-lockIF, e := NewRedisLock(100, pool, "cisco", timeout)
+import  "github.com/liuhangkaixcode/dis-redis"
+lockIF, e := dis_redis.NewRedisLock(100, pool, "cisco", timeout)
 	if e!=nil {
 		panic("参数异常")
 	}
